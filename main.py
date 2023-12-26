@@ -28,6 +28,6 @@ async def client_side_receive_msg(sid, msg, student, alumni):
         chat_collection.update_one(
             {"alumni": alumni}, {"$push": {"chat": {"time": datetime.datetime.now(), "text": msg, "sender": student}}}
         )
-        await sio.emit("msg", str(msg))
+        await sio.emit("msg", {"text": msg, "sender": student})
     except:
         pass
