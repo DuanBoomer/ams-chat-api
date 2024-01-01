@@ -9,7 +9,7 @@ app = FastAPI()
 STATIC_API_URL = "https://ams-backend-bdx5.onrender.com"
 
 origins = [
-    "http://localhost:3000", "https://alumni-mapping-system.vercel.app"
+    "http://localhost:3000", "https://alumni-mapping-system.vercel.app", "https://ams-backend-bdx5.onrender.com"
 ]
 
 uri = "mongodb+srv://chirag1292003:12092003Duan@alumni-mapping-system-d.iryfq1v.mongodb.net/?retryWrites=true&w=majority"
