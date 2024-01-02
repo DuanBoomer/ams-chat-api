@@ -27,9 +27,20 @@ def read_root():
     return {"Chat": "Opened"}
 
 
+@sio.event
+async def connect(sid, environ, alumni):
+    await sio.enter_room(sid, alumni)
+    print(sid, "connected")
+    # print(alumni)
+
+
+@sio.event
+def disconnect(sid):
+    print(sid, "disconnected")
+
+
 @sio.on('msg')
 async def client_side_receive_msg(sid, msg, student, alumni):
-    await sio.enter_room(sid, alumni)
     try:
         chat_collection.update_one(
             {"alumni": alumni}, {"$push": {
