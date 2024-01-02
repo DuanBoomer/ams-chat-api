@@ -29,12 +29,13 @@ def read_root():
 
 @sio.on('msg')
 async def client_side_receive_msg(sid, msg, student, alumni):
+    sio.enter_room(sid, alumni)
     try:
         chat_collection.update_one(
             {"alumni": alumni}, {"$push": {
                 "chat": {"time": datetime.datetime.now(), "text": msg, "sender": student}}}
         )
-        await sio.emit("msg", {"text": msg, "sender": student})
+        await sio.emit("msg", {"text": msg, "sender": student}, to=alumni)
     except:
         pass
 
@@ -43,4 +44,4 @@ async def client_side_receive_msg(sid, msg, student, alumni):
 async def client_side_event_update(sid, alumni):
     r = requests.get(url=f"{STATIC_API_URL}/event/history/{alumni}")
     data = r.json()
-    await sio.emit("event_updates", data)
+    await sio.emit("event_updates", data, to=alumni)
