@@ -29,7 +29,7 @@ def read_root():
 
 @sio.on('msg')
 async def client_side_receive_msg(sid, msg, student, alumni):
-    sio.enter_room(sid, alumni)
+    await sio.enter_room(sid, alumni)
     try:
         chat_collection.update_one(
             {"alumni": alumni}, {"$push": {
