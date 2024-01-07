@@ -43,10 +43,32 @@ def disconnect(sid):
 async def client_side_receive_msg(sid, msg, student, alumni):
     try:
         chat_collection.update_one(
-            {"alumni": alumni}, {"$push": {
-                "chat": {"time": datetime.datetime.now(), "text": msg, "sender": student}}}
+            {"alumni": alumni},
+            {"$push": {
+                "chat": {
+                    "time": datetime.datetime.now(),
+                    "text": msg,
+                    "sender": student}
+            }}
         )
         await sio.emit("msg", {"text": msg, "sender": student}, to=alumni)
+    except:
+        pass
+
+
+@sio.on('msgdelete')
+async def client_side_delete_msg(sid, msg, student, alumni):
+    try:
+        chat_collection.update_one(
+            {"alumni": alumni},
+            {"$pull": {
+                "chat": {
+                    "text": msg,
+                    "sender": student
+                }
+            }}
+        )
+        await sio.emit("msgdelete", {"text": msg, "sender": student}, to=alumni)
     except:
         pass
 
